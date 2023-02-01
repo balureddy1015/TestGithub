@@ -45,6 +45,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: running
-        run: echo "running job with ${{ github.event.inputs.clients }}"
+        run: echo "running job with ${{ github.event.inputs.client }}"
 
   
