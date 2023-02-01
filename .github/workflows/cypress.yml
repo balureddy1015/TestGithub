@@ -1,0 +1,53 @@
+name: Cypress Integration
+on:
+  workflow_dispatch:
+    inputs:
+      client:
+        description: 'Select a client'
+        required: true
+        type: choice
+        options:
+          - asurionmyhome
+          - homeplus
+      additional-clients:
+        description: 'Do we need additional client'
+        type: boolean
+        default: false
+      clients:
+        description: 'Mention additional clients here'
+        type: string
+        default: "['asurionmyhome','homeplus']"
+jobs:
+  read_inputs:
+    runs-on: [self-hosted, cypress-8gb]
+    steps:
+      - name: Print inputs
+        run: |
+          echo "additional-clients: ${{ github.event.inputs.additional-clients }}" 
+          echo "clients: ${{ github.event.inputs.clients }}"
+          echo "client: ${{ github.event.inputs.client }}"
+  
+  multi_client_cypress:
+    if: ${{ github.event.inputs.additional-clients == 'true' }}
+    runs-on: [self-hosted, cypress-8gb]
+    strategy:
+      fail-fast: false
+      matrix:
+        clients: ${{ fromJSON(github.event.inputs.clients) }}
+        containers: ['${{ inputs.client }}', '${{ inputs.client }}', '${{ inputs.client }}']
+    steps:
+      - name: Multi clients cypress
+        run: echo "running job with ${{ matrix.clients }} ${{ matrix.containers }}"
+  
+  single_client_cypress:
+    if: ${{ github.event.inputs.additional-clients == 'false' }}
+    runs-on: [self-hosted, cypress-8gb]
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: ['${{ inputs.client }}', '${{ inputs.client }}', '${{ inputs.client }}']
+    steps:
+      - name: running
+        run: echo "running job with ${{ github.event.inputs.clients }}"
+
+  
