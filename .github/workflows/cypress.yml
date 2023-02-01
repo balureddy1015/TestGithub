@@ -19,7 +19,7 @@ on:
         default: "['asurionmyhome','homeplus']"
 jobs:
   read_inputs:
-    runs-on: [self-hosted, cypress-8gb]
+    runs-on: ubuntu-latest
     steps:
       - name: Print inputs
         run: |
@@ -28,6 +28,7 @@ jobs:
           echo "client: ${{ github.event.inputs.client }}"
   
   multi_client_cypress:
+    needs: [read_inputs]
     if: ${{ github.event.inputs.additional-clients == 'true' }}
     runs-on: [self-hosted, cypress-8gb]
     strategy:
@@ -39,6 +40,7 @@ jobs:
         run: echo "running job with ${{ matrix.clients }} ${{ matrix.containers }}"
   
   single_client_cypress:
+    needs: [read_inputs]
     if: ${{ github.event.inputs.additional-clients == 'false' }}
     runs-on: [self-hosted, cypress-8gb]
     steps:
