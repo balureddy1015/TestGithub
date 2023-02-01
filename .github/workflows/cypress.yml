@@ -34,7 +34,6 @@ jobs:
       fail-fast: false
       matrix:
         clients: ${{ fromJSON(github.event.inputs.clients) }}
-        containers: ['${{ inputs.client }}', '${{ inputs.client }}', '${{ inputs.client }}']
     steps:
       - name: Multi clients cypress
         run: echo "running job with ${{ matrix.clients }} ${{ matrix.containers }}"
@@ -42,10 +41,6 @@ jobs:
   single_client_cypress:
     if: ${{ github.event.inputs.additional-clients == 'false' }}
     runs-on: [self-hosted, cypress-8gb]
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: ['${{ inputs.client }}', '${{ inputs.client }}', '${{ inputs.client }}']
     steps:
       - name: running
         run: echo "running job with ${{ github.event.inputs.clients }}"
