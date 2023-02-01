@@ -30,7 +30,7 @@ jobs:
   multi_client_cypress:
     needs: [read_inputs]
     if: ${{ github.event.inputs.additional-clients == 'true' }}
-    runs-on: [self-hosted, cypress-8gb]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -42,7 +42,7 @@ jobs:
   single_client_cypress:
     needs: [read_inputs]
     if: ${{ github.event.inputs.additional-clients == 'false' }}
-    runs-on: [self-hosted, cypress-8gb]
+    runs-on: ubuntu-latest
     steps:
       - name: running
         run: echo "running job with ${{ github.event.inputs.clients }}"
